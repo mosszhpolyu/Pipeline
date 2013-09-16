@@ -1,13 +1,18 @@
 <?php
 	// include class
 	// specify class path
-	require('./PHPExcel/Reader/Excel2007.php');
-	require('db file path');
+	require('./class/PHPExcel/Reader/Excel2007.php');
+	// database connection file path
+	//require('db file path');
+
+	// hard code job_id
+	$jobID = '20130916';
 
 	// preapre to read Excel file
 	$xlsxReader = PHPExcel_IOFactory::createReader('Excel2007');
 	$xlsxReader->setReadDataOnly(true);
-	$xlsxFile = $xlsxReader->load("test.xlsx");
+	//$xlsxFile = $xlsxReader->load("test.xlsx");
+	$xlsxFile = $xlsxReader->load($_FILES["file"]["tmp_name"]);
 	$currentSheet;
 
 	//////////////////////////////
@@ -47,9 +52,10 @@
 	// variable to store current data read from Excel's current cell
 	/////////////////////////////
 	$currentData;
-
+	//echo "helo". $xlsxFile->setActiveSheetIndex('0')->getHighestRow();
+	//echo "good". $xlsxFile->setActiveSheetIndex('1')->getHighestRow();
 	// check if two worksheets have the same number of rows
-	if(xlsxFile->setActiveSheetIndex(0)->getHighestRow() != xlsxFile->setActiveSheetIndex(1)->getHighestRow()) {
+	if($xlsxFile->setActiveSheetIndex('0')->getHighestRow() != $xlsxFile->setActiveSheetIndex('1')->getHighestRow()) {
 		// abort the execution
 		// send error message
 	} // end if
@@ -58,30 +64,44 @@
 	else {
 		// create table
 		// call create table code here
-		include('./createTable.php');
+		//include('./createTable.php');
 
 		// read data from normal and disease sheet
 		// normal sheet as sheetIndex = 1
 		// disease sheet as sheetIndex = 2
+		// row index starts from 1 aka first row on excel file
+		// column index starts from A aka first column on excel file
 		for($sheetIndex = 0; $sheetIndex < $xlsxFile->getSheetCount(); $sheetIndex++) {
 			$currentSheet = $xlsxFile->getSheet($sheetIndex);
 			// read the dataset row by row
-			for($currentRow = 0; $currentRow < $currentSheet->getHighestRow(); $currentRow++) {
-
-
-				// first row is always sample_id
+			// as first row is always header
+			// we start iterate from second row. aka $currentRow = 1
+			for($currentRow = 1; $currentRow <= $currentSheet->getHighestRow(); $currentRow++) {
+				// we skip first row as it is column headers
+				if($currentRow == 1) {
+					continue;
+				}
+				// second row is always sample schema
 				// store these sample_id to array
-				if($currentRow == 0) {
+				else if($currentRow == 2) {
 					switch ($sheetIndex) {
 						case '0':
-							for($currentCol = 0; $currentCol < $currentSheet->getHighestColumn(); $currentCol++) {
+							for($currentColStr = 'A'; $currentColStr <= $currentSheet->getHighestColumn(); ++$currentColStr) {
+								// PHPExcel_Cell::columnIndexFromString($currentColStr) returns order of alphabet
+								// A is 1
+								// since column index starts from 0, we need to decrease one
+								$currentCol = PHPExcel_Cell::columnIndexFromString($currentColStr) - 1;
+								// get current cell's value
 								$sampleIdNormal[$currentCol] = $currentSheet->getCellByColumnAndRow($currentCol, $currentRow)->getValue();
+								PHPExcel_Cell::columnIndexFromString($currentColStr);
 							}
 							break;
 					
 						case '1':
 							for($currentCol = 0; $currentCol < $currentSheet->getHighestColumn(); $currentCol++) {
 								$sampleIdDisease[$currentCol] = $currentSheet->getCellByColumnAndRow($currentCol, $currentRow)->getValue();
+								//echo $currentCol;
+								//echo $currentSheet->getCellByColumnAndRow('1', '2')->getValue();
 							}
 							break;
 
@@ -93,9 +113,9 @@
 				} // end if
 
 				// for the rest of the rows
-				// else read this row
+				// read this row
 				else {
-					// starting from 2nd row, we read each cell and insert it to database
+					// starting from 3rd row, we read each cell and insert it to database
 					for($currentCol = 0; $currentCol < $currentSheet->getHighestColumn(); $currentCol++) {
 						// the first two columns are gene name and probe id
 						// we store them in a temp array
@@ -130,6 +150,9 @@
 
 					} // end for, we now have one row of data inserted
 				} // end else
+				//echo $sampleIdNormal[$currentCol];
+				//echo $sampleIdDisease[$currentCol];
+				//echo $currentData;
 			} // end for, we now have all rows read in one worksheet
 		} // end read sheet for, we now have both normal and disease data read and inserted to database
 	} // end else checking if the have the same number of rows
