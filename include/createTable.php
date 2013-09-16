@@ -26,31 +26,31 @@
 	// gene_jobID table
 	// probe_id varchar(255), gene_name varchar(255)
 	//////////////////////////////////
-	$geneTableSchema = '{' . $probe_id . 'VARCHAR(255)' . ',' . $gene_name . 'VARCHAR(255)' . '}';
+	$geneTableSchema = '{' . $gene_name . 'VARCHAR(255)' . $probe_id . 'VARCHAR(255)' . ',' . '}';
 
 	//////////////////////////////////
 	// expressionNormal table
-	// probe_id varchar(255), sample_id varchar(255), expression_level float
+	// gene_name varchar(255), sample_id varchar(255), expression_level float
 	//////////////////////////////////
-	$expressionNormalTableSchema = '{' . $probe_id . 'VARCHAR(255)' . ',' . $sample_id . 'VARCHAR(255)' . $expression_level . 'FLOAT' . '}';
+	$expressionNormalTableSchema = '{' . $gene_name . 'VARCHAR(255)' . ',' . $sample_id . 'VARCHAR(255)' . $expression_level . 'FLOAT' . '}';
 
 	//////////////////////////////////
 	// expressionDisease table
-	// probe_id varchar(255), sample_id varchar(255), expression_level float
+	// gene_name varchar(255), sample_id varchar(255), expression_level float
 	//////////////////////////////////
-	$expressionDiseaseTableSchema = '{' . $probe_id . 'VARCHAR(255)' . ',' . $sample_id . 'VARCHAR(255)' . $expression_level . 'FLOAT' . '}';
+	$expressionDiseaseTableSchema = '{' . $gene_name . 'VARCHAR(255)' . ',' . $sample_id . 'VARCHAR(255)' . $expression_level . 'FLOAT' . '}';
 
 	//////////////////////////////////
 	// correlationNormal table
-	// probe1_id varchar(255), probe2_id varchar(255), correlation_R float, correlation_P float
+	// gene_name_1 varchar(255), gene_name_2 varchar(255), correlation_R float, correlation_P float
 	//////////////////////////////////
-	$correlationNormalTableSchema = '{' . $probe1_id . 'VARCHAR(255)' . ',' . $probe2_id . 'VARCHAR(255)' . ',' . $correlation_R . 'FLOAT' . ',' . $correlation_P . 'FLOAT' . '}';
+	$correlationNormalTableSchema = '{' . $gene_name_1 . 'VARCHAR(255)' . ',' . $gene_name_2 . 'VARCHAR(255)' . ',' . $correlation_R . 'FLOAT' . ',' . $correlation_P . 'FLOAT' . '}';
 
 	//////////////////////////////////
 	// correlationDisease table
-	// probe1_id varchar(255), probe2_id varchar(255), correlation_R float, correlation_P float
+	// gene_name_1 varchar(255), gene_name_2 varchar(255), correlation_R float, correlation_P float
 	//////////////////////////////////
-	$correlationDiseaseTableSchema = '{' . $probe1_id . 'VARCHAR(255)' . ',' . $probe2_id . 'VARCHAR(255)' . ',' . $correlation_R . 'FLOAT' . ',' . $correlation_P . 'FLOAT' . '}';
+	$correlationDiseaseTableSchema = '{' . $gene_name_1 . 'VARCHAR(255)' . ',' . $gene_name_2 . 'VARCHAR(255)' . ',' . $correlation_R . 'FLOAT' . ',' . $correlation_P . 'FLOAT' . '}';
 
 
 	//////////////////////////////////
