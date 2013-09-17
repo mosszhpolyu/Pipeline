@@ -15,6 +15,13 @@
 	$xlsxFile = $xlsxReader->load($_FILES["file"]["tmp_name"]);
 	$currentSheet;
 
+	// Regular expression patterns
+	$PATTERN_NON_WHITE_SPACE = '/^[^\s]+$/';
+	$PATTERN_SAMPLE_ID;
+	$PATTERN_GENE_NAME;
+	$PATTERN_PROBE_ID;
+	$PATTERN_EXPRESSION_VALUE;
+
 	//////////////////////////////
 	// create 5 tables
 	// gene_jobID
@@ -72,6 +79,8 @@
 		// row index starts from 1 aka first row on excel file
 		// column index starts from A aka first column on excel file
 		for($sheetIndex = 0; $sheetIndex < $xlsxFile->getSheetCount(); $sheetIndex++) {
+			echo $sheetIndex;
+			echo "<html><br></html>";
 			$currentSheet = $xlsxFile->getSheet($sheetIndex);
 			// read the dataset row by row
 			// as first row is always header
@@ -93,15 +102,19 @@
 								$currentCol = PHPExcel_Cell::columnIndexFromString($currentColStr) - 1;
 								// get current cell's value
 								$sampleIdNormal[$currentCol] = $currentSheet->getCellByColumnAndRow($currentCol, $currentRow)->getValue();
-								PHPExcel_Cell::columnIndexFromString($currentColStr);
+								echo $sampleIdNormal[$currentCol] . ',';
 							}
 							break;
 					
 						case '1':
-							for($currentCol = 0; $currentCol < $currentSheet->getHighestColumn(); $currentCol++) {
+							for($currentColStr = 'A'; $currentColStr <= $currentSheet->getHighestColumn(); $currentColStr++) {
+								// PHPExcel_Cell::columnIndexFromString($currentColStr) returns order of alphabet
+								// A is 1
+								// since column index starts from 0, we need to decrease one
+								$currentCol = PHPExcel_Cell::columnIndexFromString($currentColStr) - 1;
+								// get current cell's value
 								$sampleIdDisease[$currentCol] = $currentSheet->getCellByColumnAndRow($currentCol, $currentRow)->getValue();
-								//echo $currentCol;
-								//echo $currentSheet->getCellByColumnAndRow('1', '2')->getValue();
+								echo $sampleIdDisease[$currentCol] . ',';
 							}
 							break;
 
@@ -116,17 +129,26 @@
 				// read this row
 				else {
 					// starting from 3rd row, we read each cell and insert it to database
-					for($currentCol = 0; $currentCol < $currentSheet->getHighestColumn(); $currentCol++) {
+					for($currentColStr = 'A'; $currentColStr <= $currentSheet->getHighestColumn(); $currentColStr++) {
+						// PHPExcel_Cell::columnIndexFromString($currentColStr) returns order of alphabet
+						// A is 1
+						// since column index starts from 0, we need to decrease one
+						$currentCol = PHPExcel_Cell::columnIndexFromString($currentColStr) - 1;
 						// the first two columns are gene name and probe id
 						// we store them in a temp array
 						if($currentCol == 0 || $currentCol == 1) {
-							$geneData[$currentCol] = $currentSheet->getCellByColumnAndRow($currentCol, $currentRow)->getValue();
+							$geneData[$currentCol] = trim($currentSheet->getCellByColumnAndRow($currentCol, $currentRow)->getCalculatedValue());
+							if(preg_match($PATTERN_NON_WHITE_SPACE, $geneData[$currentCol])) {
+								echo $geneData[$currentCol] . ',';
+							}
 						}
 						// starting from 3rd column, it is the data
 						else {
-							$currentData = $currentSheet->getCellByColumnAndRow($currentCol, $currentRow)->getValue();
+							$currentData = trim($currentSheet->getCellByColumnAndRow($currentCol, $currentRow)->getCalculatedValue());
+							if(preg_match($PATTERN_NON_WHITE_SPACE, $currentData)) {
+								echo $currentData . ',';
+							}
 						}
-
 						// code to insert into gene table
 						// ?????????????????????????????
 						// complete code here
@@ -136,24 +158,20 @@
 								// ?????????????????????????????
 								// complete code here
 								break;
-							
 							case '1':
 								// insert into expressionDiseaseble
 								// ?????????????????????????????
 								// complete code here
 								break;
-
 							default:
 								# code...
 								break;
 						}
-
 					} // end for, we now have one row of data inserted
-				} // end else
-				//echo $sampleIdNormal[$currentCol];
-				//echo $sampleIdDisease[$currentCol];
-				//echo $currentData;
+				}
+				echo "\n";
 			} // end for, we now have all rows read in one worksheet
+			echo "<html><br></html>";
 		} // end read sheet for, we now have both normal and disease data read and inserted to database
 	} // end else checking if the have the same number of rows
 
