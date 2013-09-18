@@ -3,7 +3,7 @@
 	// specify class path
 	require('./class/PHPExcel/Reader/Excel2007.php');
 	// database connection file path
-	//require('db file path');
+	require('./config.php');
 
 	// hard code job_id
 	$jobID = '20130916';
@@ -71,7 +71,7 @@
 	else {
 		// create table
 		// call create table code here
-		//include('./createTable.php');
+		// include('./createTable.php');
 
 		// read data from normal and disease sheet
 		// normal sheet as sheetIndex = 1
@@ -79,8 +79,6 @@
 		// row index starts from 1 aka first row on excel file
 		// column index starts from A aka first column on excel file
 		for($sheetIndex = 0; $sheetIndex < $xlsxFile->getSheetCount(); $sheetIndex++) {
-			echo $sheetIndex;
-			echo "<html><br></html>";
 			$currentSheet = $xlsxFile->getSheet($sheetIndex);
 			// read the dataset row by row
 			// as first row is always header
