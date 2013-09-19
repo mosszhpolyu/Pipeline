@@ -4,6 +4,8 @@
 	$SQL_SET_CHARACTER_CLIENT = "SET CHARACTER_SET_CLIENT = utf8; ";
 	$SQL_SET_CHARACTER_RESULTS = "SET CHARACTER_SET_RESULTS = utf8; ";
 
+	// constant time zone location
+	$SERVER_TIME_ZONE = "Asia/Hong_Kong";
 	// database host, localhost in this case
 	$HOST = "localhost";
 
@@ -34,5 +36,8 @@
 		die('Could not connect: ' . mysqli_error());
 		exit();
 	}
+
+	// set default time zone
+	date_default_timezone_set($SERVER_TIME_ZONE);
 
 ?>
