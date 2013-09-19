@@ -1,6 +1,13 @@
 <?php
+	// constant time zone location
+	$SERVER_TIME_ZONE = "Asia/Hong_Kong";
+	// set default time zone
+	date_default_timezone_set($SERVER_TIME_ZONE);
+
 	// get timestamp
 	$timeStamp = time();
+
+	$formattedTime = date("Y-m-d H:i", $timeStamp);
 
 	// generate 4-digit alphanumerical random string as salt
 	$salt = substr(md5(rand()), 0, 4);
@@ -17,6 +24,8 @@
 	$jobID = $part1 . $part2;
 
 	echo "JOB ID: " . $jobID;
+	echo "<html><br></html>";
+	echo "JOB Time: " . $formattedTime;
 	echo "<html><br></html>";
 	echo "<html><br></html>";
 ?>
