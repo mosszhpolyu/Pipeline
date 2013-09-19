@@ -2,11 +2,12 @@
 	// include class
 	// specify class path
 	require('./class/PHPExcel/Reader/Excel2007.php');
-	// database connection file path
-	require('./config.php');
 
-	// hard code job_id
-	$jobID = '20130916';
+	// database connection file path
+	//require('./config.php');
+
+	// create Job Id
+	require('./createJobID.php');
 
 	// preapre to read Excel file
 	$xlsxReader = PHPExcel_IOFactory::createReader('Excel2007');
@@ -59,8 +60,7 @@
 	// variable to store current data read from Excel's current cell
 	/////////////////////////////
 	$currentData;
-	//echo "helo". $xlsxFile->setActiveSheetIndex('0')->getHighestRow();
-	//echo "good". $xlsxFile->setActiveSheetIndex('1')->getHighestRow();
+
 	// check if two worksheets have the same number of rows
 	if($xlsxFile->setActiveSheetIndex('0')->getHighestRow() != $xlsxFile->setActiveSheetIndex('1')->getHighestRow()) {
 		// abort the execution
@@ -71,7 +71,7 @@
 	else {
 		// create table
 		// call create table code here
-		// include('./createTable.php');
+		include('./include/createTable.php');
 
 		// read data from normal and disease sheet
 		// normal sheet as sheetIndex = 1
