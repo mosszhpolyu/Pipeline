@@ -4,12 +4,13 @@
 
 	// constant SQL statement create table
 	$SQL_CREATE_TABLE = 'CREATE TABLE ';
+	$SQL_INSERT = 'INSERT INTO ';
 	
 	// Assign table names, which are identified by jobID
 	$geneTableName = $jobID . '_gene';
 	$expressionNormalTableName = $jobID . '_expression_normal';
 	$expressionDiseaseTableName = $jobID . '_expression_disease';
-	$correlationNormalTableName = $jobID . '_correlation_normal';
+	$correlationNormalTableName = $jobID . '_correaltion_normal';
 	$correlationDiseaseTableName = $jobID . '_correlation_disease';
 
 	//////////////////////////////////
@@ -61,11 +62,11 @@
 	//////////////////////////////////
 	// create tables SQL state
 	//////////////////////////////////
-	$geneTableSQL = $SQL_CREATE_TABLE . $geneTableName . $geneTableSchema;
-	$expressionNormalTableSQL = $SQL_CREATE_TABLE . $expressionNormalTableName . $expressionNormalTableSchema;
-	$expressionDiseaseTableSQL = $SQL_CREATE_TABLE . $expressionDiseaseTableName . $expressionDiseaseTableSchema;
-	$correlationNormalTableSQL = $SQL_CREATE_TABLE . $correlationNormalTableName . $expressionNormalTableSchema;
-	$correlationDiseaseTableSQL = $SQL_CREATE_TABLE . $correlationDiseaseTableName . $expressionDiseaseTableSchema;
+	$createGeneTableSQL = $SQL_CREATE_TABLE . $geneTableName . $geneTableSchema;
+	$createExpressionNormalTableSQL = $SQL_CREATE_TABLE . $expressionNormalTableName . $expressionNormalTableSchema;
+	$createExpressionDiseaseTableSQL = $SQL_CREATE_TABLE . $expressionDiseaseTableName . $expressionDiseaseTableSchema;
+	$createCorrelationNormalTableSQL = $SQL_CREATE_TABLE . $correlationNormalTableName . $expressionNormalTableSchema;
+	$createCorrelationDiseaseTableSQL = $SQL_CREATE_TABLE . $correlationDiseaseTableName . $expressionDiseaseTableSchema;
 
 	/////////////////////////////////
 	// alter table
@@ -76,9 +77,9 @@
 	/////////////////////////////////
 	// execute the SQL statements
 	/////////////////////////////////
-	mysqli_query($DATABASE_LINK, $geneTableSQL);
-	mysqli_query($DATABASE_LINK, $expressionNormalTableSQL);
-	mysqli_query($DATABASE_LINK, $expressionDiseaseTableSQL);
-	mysqli_query($DATABASE_LINK, $correlationNormalTableSQL);
-	mysqli_query($DATABASE_LINK, $correlationDiseaseTableSQL);
+	mysqli_query($DATABASE_LINK, $createGeneTableSQL);
+	mysqli_query($DATABASE_LINK, $createExpressionNormalTableSQL);
+	mysqli_query($DATABASE_LINK, $createExpressionDiseaseTableSQL);
+	mysqli_query($DATABASE_LINK, $createCorrelationNormalTableSQL);
+	mysqli_query($DATABASE_LINK, $createCorrelationDiseaseTableSQL);
 ?>
