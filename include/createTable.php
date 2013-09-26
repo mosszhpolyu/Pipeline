@@ -3,8 +3,13 @@
 	require('./config.php');
 
 	// constant SQL statement create table
+	$SQL_DESCRIBE = 'DESCRIBE ';
 	$SQL_CREATE_TABLE = 'CREATE TABLE ';
 	$SQL_INSERT = 'INSERT INTO ';
+	$SQL_UPDATE = 'UPDATE ';
+
+	// table name of jobID and connection information
+	$jobTableName = 'job';
 	
 	// Assign table names, which are identified by jobID
 	$geneTableName = $jobID . '_gene';
@@ -16,6 +21,10 @@
 	//////////////////////////////////
 	// constant values for table schema
 	//////////////////////////////////
+	$job_id = 'job_id';
+	$start_time = 'start_time';
+	$end_time = 'end_time';
+	$ip_address = 'ip_address';
 	$probe_id = 'probe_id';
 	$gene_name = 'gene_name';
 	$sample_id = 'sample_id';
@@ -29,6 +38,12 @@
 	// Table schema
 	//////////////////////////////////
 
+	//////////////////////////////////
+	// job table
+	// job_id varchar(255), start_time DATETIME, end_time DATETIME, ip_address VARCHAR(255)
+	//////////////////////////////////
+	$jobTableSchema = ' (' . $job_id . ' VARCHAR(255)' . ', ' . $start_time . ' DATETIME' . ', ' . $end_time . ' DATETIME' . ', '. $ip_address . ' VARCHAR(255)' . ')';
+	
 	//////////////////////////////////
 	// gene_jobID table
 	// probe_id varchar(255), gene_name varchar(255)
@@ -62,6 +77,8 @@
 	//////////////////////////////////
 	// create tables SQL state
 	//////////////////////////////////
+	$describeJobTableSQL = $SQL_DESCRIBE . $jobTableName;
+	$createJobTableSQL = $SQL_CREATE_TABLE . $jobTableName . $jobTableSchema;
 	$createGeneTableSQL = $SQL_CREATE_TABLE . $geneTableName . $geneTableSchema;
 	$createExpressionNormalTableSQL = $SQL_CREATE_TABLE . $expressionNormalTableName . $expressionNormalTableSchema;
 	$createExpressionDiseaseTableSQL = $SQL_CREATE_TABLE . $expressionDiseaseTableName . $expressionDiseaseTableSchema;
@@ -77,6 +94,10 @@
 	/////////////////////////////////
 	// execute the SQL statements
 	/////////////////////////////////
+	// first time condition when the job table does not exist
+	if(!mysqli_query($DATABASE_LINK, $describeJobTableSQL)) {
+		mysqli_query($DATABASE_LINK, $createJobTableSQL);
+	}
 	mysqli_query($DATABASE_LINK, $createGeneTableSQL);
 	mysqli_query($DATABASE_LINK, $createExpressionNormalTableSQL);
 	mysqli_query($DATABASE_LINK, $createExpressionDiseaseTableSQL);
