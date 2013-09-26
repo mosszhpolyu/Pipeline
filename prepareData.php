@@ -7,7 +7,7 @@
 	require('./config.php');
 
 	// create Job Id
-	require('./createJobID.php');
+	include('./include/createJob.php');
 
 	// preapre to read Excel file
 	$xlsxReader = PHPExcel_IOFactory::createReader('Excel2007');
@@ -62,8 +62,10 @@
 	// condition where they have the same number of rows
 	else {
 		// create table
-		// call create table code here
 		include('./include/createTable.php');
+
+		// insert current job information
+		include('./include/insertJob.php');
 
 		// read data from normal and disease sheet
 		// normal sheet as sheetIndex = 1
@@ -89,7 +91,7 @@
 						case '0':
 							$expressionTableName = $expressionNormalTableName;
 							break;
-							
+
 						// Disease case
 						case '1':
 							$expressionTableName = $expressionDiseaseTableName;
@@ -141,9 +143,9 @@
 					$geneData = array();
 					$expressionData = array();
 				}
-				echo "\n";
+				//echo "\n";
 			} // end for, we now have all rows read in one worksheet
-			echo "<html><br></html>";
+			// echo "<html><br></html>";
 			// reset the sampleId array
 			$sampleId = array();
 		} // end read sheet for, we now have both normal and disease data read and inserted to database
@@ -151,4 +153,7 @@
 
 	// need a way to do memory management
 	// ???????????????????????????????????
+
+	// end task is house keeping
+	include('./include/houseKeeping.php');
 ?>
