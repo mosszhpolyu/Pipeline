@@ -1,5 +1,5 @@
 <?php
-	
+
 	// insert gene name and probe id to table
 	include('./include/insertGeneName.php');
 	
