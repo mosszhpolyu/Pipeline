@@ -9,6 +9,13 @@
 
 	$formattedTime = date("Y-m-d H:i", $timeStamp);
 
+	// 
+	$startTime = date("Y-m-d H:i:s");
+	$endTime = 'NULL';
+
+	// obtaine client's connection ip address
+	$ipAddress = $_SERVER['REMOTE_ADDR'];
+
 	// generate 4-digit alphanumerical random string as salt
 	$salt = substr(md5(rand()), 0, 4);
 
@@ -16,7 +23,7 @@
 	$seed = $salt . $timeStamp;
 
 	// generate 27-digit key, upper case only
-	$key = strtoupper(uniqid($seed));
+	$key = uniqid($seed);
 
 	// truncate first 4 and last 3 digit of key as jobID for user
 	$part1 = substr($key, 0, strlen($salt));
